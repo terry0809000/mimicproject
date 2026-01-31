@@ -1,0 +1,16 @@
+numpy==1.26.4
+pandas==2.2.1
+scikit-learn==1.4.2
+scipy==1.12.0
+matplotlib==3.8.3
+seaborn==0.13.2
+tqdm==4.66.2
+psutil==5.9.8
+joblib==1.4.2
+iterative-stratification==0.1.7
+transformers==4.41.2
+datasets==2.19.1
+torch==2.3.1
+xgboost==2.0.3
+evaluate==0.4.2
+fvcore==0.1.5.post20221221
