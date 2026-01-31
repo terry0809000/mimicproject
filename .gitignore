@@ -1,0 +1,29 @@
+__pycache__/
+.ipynb_checkpoints/
+.venv/
+.env
+.env.*
+
+# Data
+data/
+**/mimic-iii-clinical-database-1.4/
+**/NOTEEVENTS.csv
+**/NOTEEVENTS.csv.gz
+**/MIMIC-SBDH*.csv
+**/MIMIC-SBDH*.xlsx
+
+# Outputs (keep structure, but ignore generated files)
+outputs/
+!outputs/
+!outputs/.gitkeep
+
+# Model artifacts
+**/models/
+**/models_transformers/
+**/*.joblib
+**/*.pkl
+**/*.pt
+**/*.bin
+
+# OS
+.DS_Store
