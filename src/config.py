@@ -10,7 +10,7 @@ DATA_DIR = PROJECT_ROOT / "data"
 OUTPUT_DIR = PROJECT_ROOT / "outputs"
 
 RANDOM_SEED = 42
-DATA_SOURCE = "dummy"  # "dummy" or "real"
+DATA_SOURCE = "real"  # "dummy" or "real"
 
 SPLIT_RATIOS = {
     "train": 0.7,
@@ -45,8 +45,12 @@ BASELINE_MODELS = ["logreg", "rf", "xgb"]
 
 @dataclass
 class PathsConfig:
-    mimic_notes_path: Path = DATA_DIR / "mimiciii" / "NOTEEVENTS.csv.gz"
-    mimic_sbdh_path: Path = DATA_DIR / "mimic_sbdh" / "annotations.csv"
+    mimic_notes_path: Path = Path(
+        "D:\\Social Determinants Research\\MIMIC DATASETS\\mimic-iii-clinical-database-1.4.zip"
+    )
+    mimic_sbdh_path: Path = Path(
+        "D:\\Social Determinants Research\\MIMIC DATASETS\\MIMIC-SBDH.csv"
+    )
     dataset_path: Path = OUTPUT_DIR / "dataset.csv"
     dataset_summary_path: Path = OUTPUT_DIR / "dataset_summary.json"
 
