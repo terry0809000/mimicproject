@@ -1,68 +1,110 @@
-# MIMIC SDoH Benchmarking Pipeline
+# Applying NLP Methods to Extract Social Determinants of Health from MIMIC-III Clinical Notes
 
-This repository provides a reproducible benchmarking workflow for extracting Social/Behavioral Determinants of Health (SDoH/SBDH) from ICU clinical notes using **MIMIC-III** notes and **MIMIC-SBDH** expert labels. The workflow is designed to run end-to-end in a single notebook for controlled experimental benchmarking.
+A publication-grade, reproducible benchmark pipeline for SBDH extraction using MIMIC-SBDH annotations linked to MIMIC-III notes.
 
-## Project Goals (Summary)
-- Benchmark traditional ML baselines vs. clinical transformers for SDoH extraction.
-- Report macro-F1 (primary), micro-F1, AUROC, and per-class metrics.
-- Conduct error analysis focused on negation, temporality, and implicit mentions.
-- Quantify computational costs and produce publication-ready tables/figures.
+## Benchmark scope
+- Controlled benchmarking across model families with **identical patient-level splits**.
+- Primary analytical text: **social history section** of discharge summaries.
+- Families:
+  1. Rule-based baseline with NegEx-style negation handling
+  2. Sparse-feature ML baselines (TF-IDF + LR/SVM/RF/XGBoost)
+  3. Transformer fine-tuning (BERT/BioBERT/ClinicalBERT)
+- Standardized metrics and capability-oriented tests.
 
-## How to Run (Notebook)
-### Option A: Google Colab (preferred)
-1. Upload this repo to a Colab workspace or open it from GitHub.
-2. Open `notebooks/01_end_to_end_benchmark.ipynb`.
-3. Run the setup cell to install dependencies.
-4. (Optional) Mount Google Drive and update paths in the config cell.
-5. Execute all cells top-to-bottom.
+## Data assumptions
+Input requires two files:
+1. Note table with note ID, patient ID, note text, and category columns.
+2. Annotation table with note ID and binary task labels:
+   - `sdoh_community_present`
+   - `sdoh_community_absent`
+   - `sdoh_education`
+   - `sdoh_economics`
+   - `sdoh_environment`
+   - `behavior_alcohol`
+   - `behavior_tobacco`
+   - `behavior_drug`
 
-### Option B: Local Jupyter (conda/venv)
+All column names are configurable in `config/data.yaml`.
+
+## Secure use and governance
+- Run only in approved secure environments.
+- Raw note text is never sent to external APIs.
+- Preserve de-identification tokens.
+
+## Installation
 ```bash
-# Create environment
-conda env create -f environment.yml
-conda activate mimic-sdoh
-
-# OR use pip
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-
-# Launch notebook
-jupyter notebook notebooks/01_end_to_end_benchmark.ipynb
 ```
 
-## Data Access (MIMIC-III + MIMIC-SBDH)
-1. Obtain PhysioNet credentials and download datasets.
-2. Update the notebook configuration cell with your local paths (defaults are Windows paths).
-3. Ensure you have `NOTEEVENTS.csv(.gz)` under the MIMIC-III root.
+## Configuration
+1. Copy `.env.example` to `.env` (optional for environment-driven overrides).
+2. Update paths in `config/base.yaml` and schema in `config/data.yaml`.
 
-**Important:** Do not hardcode credentials. Use environment variables or a local config file that is excluded from git.
-
-## Outputs Produced
-The notebook writes deterministic artifacts under `outputs/`:
-- `outputs/dataset_summary.json`
-- `outputs/splits/{train,val,test}.csv`
-- `outputs/metrics/metrics_table.csv`
-- `outputs/figures/*.png`
-- `outputs/cost/cost_table.csv`
-
-## Repo Layout
+## Reproduce benchmark
+Quick smoke benchmark:
+```bash
+python scripts/run_all_experiments.py --mode quick --skip-transformers
 ```
-notebooks/
-  01_end_to_end_benchmark.ipynb
+
+Full benchmark:
+```bash
+python scripts/run_all_experiments.py --mode full
+```
+
+Granular commands:
+```bash
+python scripts/prepare_data.py --config config/base.yaml
+python scripts/inspect_labels.py --config config/base.yaml
+python scripts/train_rule_based.py --task all
+python scripts/train_tfidf_logreg.py --task all
+python scripts/train_tfidf_svm.py --task all
+python scripts/train_tfidf_rf.py --task all
+python scripts/train_tfidf_xgb.py --task all
+python scripts/train_transformer.py --model emilyalsentzer/Bio_ClinicalBERT --task all
+python scripts/run_capability_tests.py --models all
+python scripts/evaluate_all.py
+python scripts/generate_report_artifacts.py
+```
+
+## Workflow
+1. **Prepare data**: schema validation, linkage checks, section extraction, prevalence reports.
+2. **Split**: leakage-safe patient-level train/val/test with diagnostics.
+3. **Train**: model-family-specific scripts save models and metrics.
+4. **Evaluate**: standardized metrics, confusion matrices, per-class summaries.
+5. **Capability tests**: negation/attribution/temporality/misspelling challenge set.
+6. **Reporting**: CSV/JSON/LaTeX tables and figure artifacts.
+
+## Expected repository structure
+```text
+config/
+scripts/
 src/
-  data_access/
+  data/
   preprocessing/
-  splits/
   features/
   models/
+  training/
   evaluation/
-  utils/
-scripts/
+  error_analysis/
+  capability_tests/
+  reporting/
+  visualization/
+  pipelines/
+notebooks/
+tests/
+data/
 outputs/
 ```
 
-## Reproducibility
-- Fixed random seeds in the notebook setup section.
-- Patient-level splits with leakage checks.
-- Version pinning in `requirements.txt` and `environment.yml`.
+## Common failure points
+- Missing columns: check `config/data.yaml` mappings.
+- Sparse-label tasks: macro-F1 may be unstable; inspect per-class tables and bootstrap intervals.
+- Transformer OOM: reduce `max_length` and batch size in `config/models.yaml`.
+- Empty social history extraction: verify section header conventions and patterns.
+
+## Determinism and reproducibility
+- Centralized seed in `config/base.yaml`.
+- Split files persisted in `data/splits/`.
+- Artifacts persisted: metrics, predictions, figures, logs, costs, error analyses, capability outputs.

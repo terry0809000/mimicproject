@@ -1,0 +1,36 @@
+sdoh_community_present:
+  - lives with family
+  - supportive community
+  - social support
+sdoh_community_absent:
+  - homeless
+  - no social support
+  - isolated
+sdoh_education:
+  - high school
+  - college
+  - literacy
+sdoh_economics:
+  - unemployed
+  - insurance
+  - financial strain
+sdoh_environment:
+  - unsafe housing
+  - housing instability
+behavior_alcohol:
+  - alcohol use
+  - drinks daily
+  - etoh
+behavior_tobacco:
+  - smoker
+  - tobacco use
+  - cigarettes
+behavior_drug:
+  - illicit drug
+  - heroin
+  - cocaine
+negation_cues:
+  - no
+  - not
+  - denies
+  - without

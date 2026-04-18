@@ -1,0 +1,18 @@
+project:
+  name: mimic_sbdh_benchmark
+  seed: 42
+  quick_mode: false
+  secure_environment_required: true
+
+paths:
+  notes_path: data/raw/NOTEEVENTS.csv.gz
+  annotations_path: data/raw/mimic_sbdh_annotations.csv
+  output_dir: outputs
+  data_dir: data
+  processed_path: data/processed/benchmark_dataset.csv
+  split_dir: data/splits
+
+runtime:
+  device: cpu
+  num_workers: 2
+  force: false

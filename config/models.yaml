@@ -1,0 +1,42 @@
+models:
+  rule_based:
+    use_negation: true
+    window_tokens: 5
+    lexicon_path: config/rule_lexicons.yaml
+
+  tfidf:
+    ngram_range: [1, 2]
+    min_df: 2
+    max_df: 0.98
+    max_features: 50000
+
+  logreg:
+    class_weight: balanced
+    C_grid: [0.5, 1.0, 2.0]
+    max_iter: 2000
+
+  linear_svm:
+    C_grid: [0.5, 1.0, 2.0]
+    class_weight: balanced
+
+  random_forest:
+    n_estimators_grid: [200, 400]
+    max_depth_grid: [20, 40]
+    class_weight: balanced_subsample
+
+  xgboost:
+    n_estimators_grid: [200, 400]
+    max_depth_grid: [4, 8]
+    learning_rate_grid: [0.05, 0.1]
+
+  transformer:
+    candidates:
+      - bert-base-uncased
+      - dmis-lab/biobert-base-cased-v1.1
+      - emilyalsentzer/Bio_ClinicalBERT
+    max_length: 256
+    learning_rate: 2.0e-5
+    train_batch_size: 8
+    eval_batch_size: 16
+    epochs: 3
+    early_stopping_patience: 2

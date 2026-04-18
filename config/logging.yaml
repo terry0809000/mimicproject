@@ -1,0 +1,5 @@
+logging:
+  level: INFO
+  log_to_file: true
+  log_dir: outputs/logs
+  console_rich: true
