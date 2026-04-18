@@ -1,0 +1,30 @@
+data:
+  note_id_col: row_id
+  patient_id_col: subject_id
+  hadm_id_col: hadm_id
+  note_text_col: text
+  category_col: category
+  allowed_note_categories:
+    - Discharge summary
+  annotation_task_columns:
+    - sdoh_community_present
+    - sdoh_community_absent
+    - sdoh_education
+    - sdoh_economics
+    - sdoh_environment
+    - behavior_alcohol
+    - behavior_tobacco
+    - behavior_drug
+  strict_binary_labels: true
+  drop_unmatched_annotations: true
+
+section_extraction:
+  section_name: social_history
+  start_patterns:
+    - "^\\s*social history\\s*:"
+    - "^\\s*social hx\\s*:"
+  end_patterns:
+    - "^\\s*family history\\s*:"
+    - "^\\s*past medical history\\s*:"
+    - "^\\s*discharge medications\\s*:"
+  fallback_to_full_text: true

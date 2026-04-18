@@ -1,0 +1,7 @@
+evaluation:
+  primary_metric: macro_f1
+  bootstrap_iterations: 200
+  bootstrap_alpha: 0.95
+  thresholds:
+    default: 0.5
+  report_per_class: true

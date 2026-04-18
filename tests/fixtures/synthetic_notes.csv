@@ -1,0 +1,5 @@
+row_id,subject_id,hadm_id,category,text
+1,10,100,Discharge summary,"Social History: denies tobacco. Family history: none"
+2,11,101,Discharge summary,"Social History: smoker one ppd. Past medical history: HTN"
+3,12,102,Discharge summary,"No social history documented"
+4,13,103,Discharge summary,"Social Hx: drinks daily. Family history: unknown"
